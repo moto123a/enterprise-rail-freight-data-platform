@@ -33,3 +33,63 @@ This project is intentionally structured to mirror real-world data platform patt
 ---
 
 ## Repo Structure
+
+kafka-ingestion/ # Producers for freight + telemetry streams
+spark-stream-processing/ # Spark streaming consumer / transformations
+airflow-orchestration/ # Airflow DAG for Bronze→Silver→Gold→Warehouse
+warehouse/ # Star schema (dims/facts) + BI mart view
+trino-query/ # KPI queries (SQL) for analytics
+docs/ # Architecture + dataset contracts documentation
+governance/ # Certified datasets definitions
+geospatial/ # Route logic + anomaly helper functions
+
+
+---
+
+## What This Platform Produces (Gold / Certified)
+- **gold_shipment_lifecycle:** shipment events standardized for reporting
+- **gold_hub_dwell_time:** dwell-time KPI outputs by hub/terminal (concept)
+- **gold_on_time_performance:** on-time / delivered-ratio KPIs by corridor (concept)
+
+---
+
+## Data Governance
+- **Dataset contracts:** required fields + validation rules  
+  See: `docs/dataset_contracts.md`
+- **Certified datasets definitions:** Gold layer expectations  
+  See: `governance/certified_datasets.md`
+
+---
+
+## KPI Queries (Trino)
+Sample queries included:
+- Shipment volume by corridor  
+- Delivered ratio / on-time proxy by corridor  
+- Delay hotspots by hub  
+- Telemetry anomaly scan (speed/status/temp rules)  
+
+See: `trino-query/analytics_queries.sql`
+
+---
+
+## Redshift Dimensional Model (Star Schema)
+- `dim_date`, `dim_location`, `dim_status`
+- `fact_shipment_events`
+- `mart_on_time_summary` view
+
+See: `warehouse/star_schema.sql`
+
+---
+
+## Why This Looks “Enterprise” (Not a Toy)
+- Clean separation of ingestion, processing, orchestration, governance, and marts  
+- Bronze/Silver/Gold layering + certified datasets  
+- Streaming + batch compatible modeling  
+- Query + warehouse patterns used in production data platforms  
+
+---
+
+## Author
+**Pavan Krishna**  
+Software Engineer | Data & Streaming Systems  
+pavankrishna310@gmail.com
